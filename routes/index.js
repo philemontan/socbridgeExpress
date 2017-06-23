@@ -11,24 +11,5 @@ router.get('/', function(req,res,next){
 })
 
 
-router.post('/', function(req,res,next){
-    var email = req.body.email;
-    var firstName = req.body.firstName;
-    var lastName = req.body.lastName;
-    var password = req.body.password;
-    var course = req.body.course;
-
-    var user = new User({
-        firstName: firstName,
-        lastName: lastName,
-        password: password,
-        email: email,
-        course: course
-    });
-    user.save();
-    res.redirect('/');
-});
-
-
 
 module.exports = router;
