@@ -81,7 +81,7 @@ router.post('/newPost', function(req,res,next) {
    });
 });
 
-
+//Add new comment route
 router.post('/newComment', function(req,res,next) {
     jwt.verify(req.query.token, 'secret', function(err, decoded) {
         if(err) {//user not authenticated
@@ -126,6 +126,117 @@ router.post('/newComment', function(req,res,next) {
     });
 });
 
+//Edit Post Route
+router.post('/editPost', function(req,res,next) {
+    jwt.verify(req.query.token, 'secret', function(err, decoded) {
+        if(err) {//user not authenticated
+            return res.status(401).json({
+                title: "Not Authenticated",
+                error: err
+            });
+        }
+        Post.findById(req.body.id, function(err, post) {
+            if(err) {
+                console.log("fail to find post");
+                return res.status(401).json({
+                    title: "Post not found",
+                    error: err
+                });
+            }
+            post.title = req.body.title;
+            post.content = req.body.content;
+            post.save(function(err, result) {
+               if(err) {
+                   console.log("fail to update post");
+                   return res.status(401).json({
+                       title: "fail to update post",
+                       error: err
+                   });
+               }
+               return res.status(202).json({
+                    title: "post updated",
+                    post: post
+               })
+            });
+        });
+    });
+});
+
+//Delete Post Route
+router.post('/deletePost', function(req,res,next) {
+    jwt.verify(req.query.token, 'secret', function(err, decoded) {
+        if(err) {//user not authenticated
+            return res.status(401).json({
+                title: "Not Authenticated",
+                error: err
+            });
+        }
+        Post.findById(req.body.id, function(err, post) {
+            if(err) {
+                console.log("Post not Found -- id is null");
+                Post.findOne({content: req.body.content}, function(err, post) {
+                    if(err) {
+                        console.log("id null & post not found");
+                    } else {
+                        //remove from module
+                        Module.findById(post.module, function(err, module) {
+                            if(err) {
+                                console.log("Module not Found");
+                            }
+                            module.posts.remove(post._id);
+                            module.save(function(err, result) {
+                                if(err) {
+                                    console.log("unable to remove from module");
+                                }
+                            });
+                        });
+                        //delete all comments
+                        post.comments.forEach(function(commentId) {
+                            Comment.findByIdAndRemove(commentId, function(err, comment) {
+                                if(err){
+                                    console.log("unable to remove comment");
+                                }
+                            });
+                        });
+                        //delete post itself
+                        post.remove();
+                        return res.status(202).json({
+                            title: "post deleted",
+                            post: post
+                        })
+                    }
+                });
+            } else {
+                //remove from module
+                Module.findById(post.module, function (err, module) {
+                    if (err) {
+                        console.log("Module not Found");
+                    }
+                    module.posts.remove(req.body.id);
+                    module.save(function (err, result) {
+                        if (err) {
+                            console.log("unable to remove from module");
+                        }
+                    });
+                });
+                //delete all comments
+                post.comments.forEach(function (commentId) {
+                    Comment.findByIdAndRemove(commentId, function (err, comment) {
+                        if (err) {
+                            console.log("unable to remove comment");
+                        }
+                    });
+                });
+                //delete post itself
+                post.remove();
+                return res.status(202).json({
+                    title: "post deleted",
+                    post: post
+                });
+            }
+        });
+    });
+});
 
 
 
