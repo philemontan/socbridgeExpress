@@ -136,9 +136,25 @@ router.post('/populate', function(req, res) {
                   });
           });
           user.save();
-          return res.status(201).json({
-             message: 'populated successfully'
-          });
+          User.findOne({email: req.body.email})
+              .populate({
+                  path: 'modules',
+                  populate: {
+                      path: 'posts',
+                      populate: {
+                          path: 'user comments',
+                          populate: {
+                              path: 'user'
+                          }
+                      }
+                  }
+              })
+              .exec(function(err, user) {
+                  return res.status(201).json({
+                      message: 'populated successfully',
+                      userObj: JSON.stringify(user)
+                  })
+              });
       });
     });
 });
