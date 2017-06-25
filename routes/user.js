@@ -95,18 +95,22 @@ router.post('/populate', function(req, res) {
       }
       User.findById(decoded.user._id, function(err, user) {
           if(err) {
+              console.log('User find error');
               return res.status(500).json({
                   title: 'An error occured',
                   error: err
               });
           }
           if(!user) {
+              console.log('User not available');
               return res.status(500).json({
                   title: 'userfind failed',
                   error: {message: 'User not found'}
               });
           }
           var modStringArr = req.body.modules;
+          var arrLength = modStringArr.length;
+
           modStringArr.forEach(function(modCode) {
               Module.findOne({module_code: modCode})
                   .exec(function(err, mod) {
@@ -123,7 +127,41 @@ router.post('/populate', function(req, res) {
                               }
                           });
                           user.modules.push(newModule._id);
-                          console.log('saving mod' + modCode);
+                          console.log('saving mod//nullmod' + modCode);
+                          arrLength--;
+                          if(arrLength===0) {
+                              user.save(function(err, user) {
+                                  if(err) {
+                                      console.log('user save failed');
+                                  }
+                                  else {
+                                      console.log('user saved');
+                                  }
+                              });
+                              User.findOne({email: decoded.user.email})
+                                  .populate({
+                                      path: 'modules',
+                                      populate: {
+                                          path: 'posts',
+                                          populate: {
+                                              path: 'user comments',
+                                              populate: {
+                                                  path: 'user'
+                                              }
+                                          }
+                                      }
+                                  })
+                                  .exec(function(err, user) {
+                                      console.log('finish populated, sending back objs');
+                                      var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+                                      return res.status(201).json({
+                                          message: 'populated successfully',
+                                          token: token,
+                                          userId: user._id,
+                                          userObj: JSON.stringify(user)
+                                      })
+                                  });
+                          }
                       }
                       if(mod) {
                           mod.members.push(user._id);
@@ -133,34 +171,44 @@ router.post('/populate', function(req, res) {
                               }
                           });
                           user.modules.push(mod._id);
-                          console.log('saving mod' + modCode);
+                          console.log('saving mod//existing mod' + modCode);
+                          arrLength--;
+                          if(arrLength===0) {
+                              user.save(function(err, user) {
+                                  if(err) {
+                                      console.log('user save failed');
+                                  }
+                                  else {
+                                      console.log('user saved');
+                                  }
+                              });
+                              User.findOne({email: decoded.user.email})
+                                  .populate({
+                                      path: 'modules',
+                                      populate: {
+                                          path: 'posts',
+                                          populate: {
+                                              path: 'user comments',
+                                              populate: {
+                                                  path: 'user'
+                                              }
+                                          }
+                                      }
+                                  })
+                                  .exec(function(err, user) {
+                                      console.log('finish populated, sending back objs');
+                                      var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+                                      return res.status(201).json({
+                                          message: 'populated successfully',
+                                          token: token,
+                                          userId: user._id,
+                                          userObj: JSON.stringify(user)
+                                      })
+                                  });
+                          }
                       }
                   });
           });
-          user.save();
-          User.findOne({email: decoded.user.email})
-              .populate({
-                  path: 'modules',
-                  populate: {
-                      path: 'posts',
-                      populate: {
-                          path: 'user comments',
-                          populate: {
-                              path: 'user'
-                          }
-                      }
-                  }
-              })
-              .exec(function(err, user) {
-                  console.log('finish populated, sending back objs');
-                  var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
-                  return res.status(201).json({
-                      message: 'populated successfully',
-                      token: token,
-                      userId: user._id,
-                      userObj: JSON.stringify(user)
-                  })
-              });
       });
     });
 });
