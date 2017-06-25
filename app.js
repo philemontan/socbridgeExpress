@@ -10,6 +10,7 @@ var mongoose = require('mongoose');
 var index = require('./routes/index');
 var user = require('./routes/user');
 var wallPosts = require('./routes/wallPosts');
+var chat = require('./routes/chat');
 
 mongoose.connect('localhost:27017/test');
 
@@ -37,7 +38,7 @@ app.get('/', function(req,res){
 
 app.use('/user', user);
 app.use('/posts', wallPosts);
-
+app.use('/chat', chat);
 // app.get('/rest/newUser', function(req,res)){
 //     res.sendfile('views/index.html');
 // }
