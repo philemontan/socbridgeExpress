@@ -123,6 +123,7 @@ router.post('/populate', function(req, res) {
                               }
                           });
                           user.modules.push(newModule._id);
+                          console.log('saving mod' + modCode);
                       }
                       if(mod) {
                           mod.members.push(user._id);
@@ -132,11 +133,12 @@ router.post('/populate', function(req, res) {
                               }
                           });
                           user.modules.push(mod._id);
+                          console.log('saving mod' + modCode);
                       }
                   });
           });
           user.save();
-          User.findById(decoded.user._id)
+          User.findOne({email: decoded.user.email})
               .populate({
                   path: 'modules',
                   populate: {
@@ -150,8 +152,12 @@ router.post('/populate', function(req, res) {
                   }
               })
               .exec(function(err, user) {
+                  console.log('finish populated, sending back objs');
+                  var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
                   return res.status(201).json({
                       message: 'populated successfully',
+                      token: token,
+                      userId: user._id,
                       userObj: JSON.stringify(user)
                   })
               });

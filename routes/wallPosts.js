@@ -61,7 +61,7 @@ router.post('/newPost', function(req,res,next) {
                        user: user._id,
                        module: mod._id
                    });
-                   newPost.save(function(err, result) {
+                   newPost.save(function(err,savedDoc,result) {
                        if(err) {
                            console.log('fail to save new post');
                        }
@@ -70,14 +70,18 @@ router.post('/newPost', function(req,res,next) {
                            if(err) {
                                console.log('fail to save mod');
                            }
-                       })
+                       });
+                       return res.status(201).json({
+                           message: 'Post add successfully',
+                           postId: savedDoc._id
+                       });
                    })
                });
 
        });
-       return res.status(201).json({
-           message: 'module add successfully'
-       });
+       // return res.status(201).json({
+       //     message: 'module add successfully'
+       // });
    });
 });
 
