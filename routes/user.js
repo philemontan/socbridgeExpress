@@ -136,7 +136,7 @@ router.post('/populate', function(req, res) {
                   });
           });
           user.save();
-          User.findOne({email: req.body.email})
+          User.findById(decoded.user._id)
               .populate({
                   path: 'modules',
                   populate: {
