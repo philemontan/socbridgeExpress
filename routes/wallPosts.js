@@ -73,7 +73,8 @@ router.post('/newPost', function(req,res,next) {
                        });
                        return res.status(201).json({
                            message: 'Post add successfully',
-                           postId: savedDoc._id
+                           postId: savedDoc._id,
+                           post: savedDoc
                        });
                    })
                });
