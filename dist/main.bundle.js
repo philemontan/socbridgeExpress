@@ -1959,7 +1959,7 @@ module.exports = "<p>\r\n  course-connect works!\r\n</p>\r\n"
 /***/ 265:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\r\n  <div class=\"col-xs-12\">\r\n    <h1>{{testUser.course}}</h1>\r\n    <hr>\r\n  </div>\r\n  <div class=\"col-xs-4\">\r\n    <button class=\"btn btn-primary\" (click)=\"populate()\">\r\n      Populate Data\r\n    </button>\r\n    {{testUser.firstName}}\r\n    {{testUser.lastName}}\r\n    {{testUser.modules}}\r\n    {{testUser.email}}\r\n  </div>\r\n</div>\r\n"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-xs-12\">\r\n    <p>Work in Progress!</p>\r\n  </div>\r\n</div>\r\n"
 
 /***/ }),
 
