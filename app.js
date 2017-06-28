@@ -40,16 +40,19 @@ app.use(function(req, res, next) { // Allowing CORS
     next();
 });
 
-//Serving angular app
+//Point static path to dist
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// app.get('/', function(req,res){
-//     res.sendfile('views/index.html');
-// });
-
+//Set REST routes
 app.use('/user', user);
 app.use('/posts', wallPosts);
 app.use('/chat', chat);
+
+//Catch all other routes and return the index file
+app.get('/', function(req, res) {
+    app.use(express.static(path.join(__dirname, 'dist')));
+});
+
 
 // catch 404 and forward to error handler
 // app.use(function(req, res, next) {
