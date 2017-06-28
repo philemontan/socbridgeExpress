@@ -49,9 +49,9 @@ app.use('/posts', wallPosts);
 app.use('/chat', chat);
 
 //Catch all other routes and return the index file
-app.get('/', function(req, res) {
-    app.use(express.static(path.join(__dirname, 'dist')));
-});
+// app.get('/', function(req, res) {
+//     app.use(express.static(path.join(__dirname, 'dist')));
+// });
 
 
 // catch 404 and forward to error handler
