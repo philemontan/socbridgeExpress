@@ -475,12 +475,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var CourseComponent = (function () {
     function CourseComponent(route, userService, httpService, jwtHelper) {
-        // this.route.parent.params
-        //   .subscribe(
-        //     (params: Params) => {
-        //       this.currentUser = this.userService.getUserByName(params['firstName']);
-        //     }
-        //   );
         this.route = route;
         this.userService = userService;
         this.httpService = httpService;
@@ -489,29 +483,11 @@ var CourseComponent = (function () {
         this.ivleRetrievedModules = {
             modules: []
         };
-        // const decodedToken = this.jwtHelper.decodeToken(localStorage.getItem('token'));
-        // this.testUser = new User(
-        //   decodedToken.user.firstName,
-        //   decodedToken.user.lastName,
-        //   '/',
-        //   decodedToken.user.course,
-        //   3,
-        //   decodedToken.user.modules,
-        //   [],
-        //   decodedToken.user.email,
-        //   decodedToken.user.password
-        // );
         this.testUser = this.userService.getCurrentUser();
         console.log(this.userService.getCurrentUser().modules);
         this.ivleRetrievedModules.modules = this.userService.getCurrentUser().modules;
     }
     CourseComponent.prototype.ngOnInit = function () {
-    };
-    CourseComponent.prototype.populate = function () {
-        this.httpService.populate(this.ivleRetrievedModules)
-            .subscribe(function (data) {
-            console.log(data);
-        }, function (error) { return console.error(error); });
     };
     return CourseComponent;
 }());
@@ -800,7 +776,7 @@ var WallComponent = (function () {
                         storageModObjPost.comments.forEach(function (storageModObjPostComment) {
                             commentArr.push(new __WEBPACK_IMPORTED_MODULE_3__models_Comment_model__["a" /* Comment */](storageModObjPostComment.content, userSvc.createFeUserFromBeObj(storageModObjPostComment.user), storageModObjPostComment.post));
                         });
-                        wallSvc.addPost(new __WEBPACK_IMPORTED_MODULE_1__models_Post_model__["a" /* Post */](storageModObjPost.title, storageModObjPost.content, userSvc.createFeUserFromBeObj(storageModObjPost.user), params['module'], storageModObjPost._id, commentArr, storageModObjPost.user._id === storageUserObj._id));
+                        wallSvc.addPost(new __WEBPACK_IMPORTED_MODULE_1__models_Post_model__["a" /* Post */](storageModObjPost.title, storageModObjPost.content, userSvc.createFeUserFromBeObj(storageModObjPost.user), params['module'], storageModObjPost._id, commentArr, storageModObjPost.user._id === storageUserObj._id || storageModObjPost.user === storageUserObj._id));
                     });
                 }
             });
@@ -1041,6 +1017,9 @@ var IVLEComponent = (function () {
         this.ivleRetrievedModules = {
             modules: []
         };
+        this.lapiUrl = {
+            url: ''
+        };
         this.access_token = (this.route.snapshot.queryParams['token']);
         this.profile = this.http.request('https://ivle.nus.edu.sg/api/Lapi.svc/Profile_View?APIKey='
             + this.api_key + '&AuthToken=' + this.access_token);
@@ -1050,25 +1029,22 @@ var IVLEComponent = (function () {
     }
     IVLEComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.module.subscribe(function (res) {
-            var result = res.json()['Results'];
-            for (var _i = 0, result_1 = result; _i < result_1.length; _i++) {
-                var mod = result_1[_i];
-                _this.ivleRetrievedModules.modules.push(mod['CourseCode']);
-            }
-            _this.httpService.populate(_this.ivleRetrievedModules)
-                .subscribe(function (data) {
-                console.log(data);
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('userId', data.userId);
-                localStorage.setItem('user', data.userObj);
-                localStorage.setItem('message', data.message);
-                _this.userService.initializeUserData();
-            }, function (error) { return console.error(error); });
-        });
+        this.lapiUrl.url = 'https://ivle.nus.edu.sg/api/Lapi.svc/Modules?APIKey='
+            + this.api_key + '&AuthToken=' + this.access_token +
+            '&Duration=5000&IncludeAllInfo=true';
+        this.httpService.populate(this.lapiUrl)
+            .subscribe(function (data) {
+            console.log(data);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('user', data.userObj);
+            localStorage.setItem('message', data.message);
+            _this.userService.initializeUserData();
+            console.log(data.ivleRetrievedModules);
+            _this.ivleRetrievedModules = data.moduleArrObj;
+        }, function (error) { return console.error(error); });
     };
     IVLEComponent.prototype.continue = function () {
-        // this.router.navigate(['home', this.userService.getCurrentUser().firstName, 'course']);
         localStorage.clear();
         this.router.navigate(['']);
     };
@@ -2045,9 +2021,10 @@ var HttpService = (function () {
     HttpService.prototype.signOut = function () {
         localStorage.clear();
     };
-    HttpService.prototype.populate = function (modulesArr) {
+    HttpService.prototype.populate = function (lapiUri) {
         var token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
-        var body = JSON.stringify(modulesArr);
+        var body = JSON.stringify(lapiUri);
+        // const body = lapiUri;
         var header = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["c" /* Headers */]({ 'Content-Type': 'application/json' });
         return this.http.post(this.herokusDomain + 'user/populate' + token, body, { headers: header })
             .map(function (response) { return response.json(); })
