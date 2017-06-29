@@ -15,8 +15,8 @@ var chat = require('./routes/chat');
 //local MongoDB
 // mongoose.connect('localhost:27017/test');
 var options = {
-    server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
-    replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }
+server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } },
+replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }
 };
 
 //mongoLAB, ID:admin, pw: admin
