@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var socket_io = require('socket.io');
 
 var mongoose = require('mongoose');
 var index = require('./routes/index');
@@ -50,6 +51,24 @@ app.use('/chat', chat);
 
 //Catch all other routes and return the index file
 app.use('*', index);
+
+//Socket IO
+var io = socket_io();
+app.io = io;
+
+//Socket.io starts listening
+io.on('connection', function(socket) {
+   console.log('A user connected');
+
+   //methods for the particular instance of socket
+   socket.on('new message', function(msg) {
+       console.log('new message: ' + msg);
+       app.io.emit('chat message', msg);
+   })
+
+});
+
+
 
 //Catch all other routes and return the index file
 // app.get('/', function(req, res) {

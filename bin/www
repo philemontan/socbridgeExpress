@@ -31,6 +31,13 @@ server.on('listening', onListening);
 console.log('Listening on port ' + port);
 
 /**
+ * Socket.io
+ */
+
+var io = app.io;
+io.listen(server);
+
+/**
  * Normalize a port into a number, string, or false.
  */
 
