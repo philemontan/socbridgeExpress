@@ -49,6 +49,11 @@ app.use('/posts', wallPosts);
 app.use('/chat', chat);
 
 //Catch all other routes and return the index file
+router.get('*', function (req, res, next) {
+   res.sendFile(path.resolve('dist/index.html'));
+});
+
+//Catch all other routes and return the index file
 // app.get('/', function(req, res) {
 //     app.use(express.static(path.join(__dirname, 'dist')));
 // });
