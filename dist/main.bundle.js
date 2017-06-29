@@ -2021,7 +2021,7 @@ var HttpService = (function () {
     function HttpService(http, router) {
         this.http = http;
         this.router = router;
-        this.herokusDomain = 'socbridge.herokuapp.com/';
+        this.herokusDomain = '';
         this.localDomain = 'http://localhost:3000/';
     }
     HttpService.prototype.signUp = function (newUser) {
