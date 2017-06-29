@@ -1230,6 +1230,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var WelcomeComponent = (function () {
     function WelcomeComponent() {
+        this.locaHostStr = 'localhost:4200';
+        this.herokuDomainStr = 'socbridge.herokuapp.com';
     }
     WelcomeComponent.prototype.ngOnInit = function () {
     };
@@ -2119,7 +2121,7 @@ module.exports = "<div class=\"row\">\r\n  <div class=\"col-xs-12 coloring_class
 /***/ 276:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"jumbotron\" style=\"text-align: center\">\r\n  <h1 class=\"display-3\">NUS Connect</h1>\r\n  <p class=\"lead\">This is a platform for NUS Students to Connect and discuss!</p>\r\n  <hr class=\"my-2\">\r\n  <p>We would need you to connect to IVLE in order to retrieve your credentials</p>\r\n  <hr>\r\n  <a href=\"https://ivle.nus.edu.sg/api/login/?apikey=Nxm9ocEZtuEeyUn3ed4Ci&url=http://localhost:4200/IVLE\" class=\"btn btn-lg btn-primary NUS \">IVLE</a>\r\n</div>\r\n"
+module.exports = "<div class=\"jumbotron\" style=\"text-align: center\">\r\n  <h1 class=\"display-3\">NUS Connect</h1>\r\n  <p class=\"lead\">This is a platform for NUS Students to Connect and discuss!</p>\r\n  <hr class=\"my-2\">\r\n  <p>We would need you to connect to IVLE in order to retrieve your credentials</p>\r\n  <hr>\r\n  <a href=\"https://ivle.nus.edu.sg/api/login/?apikey=Nxm9ocEZtuEeyUn3ed4Ci&url=http://{{herokuDomainStr}}/IVLE\" class=\"btn btn-lg btn-primary NUS \">IVLE</a>\r\n</div>\r\n"
 
 /***/ }),
 
