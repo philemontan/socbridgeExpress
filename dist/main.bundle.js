@@ -2021,13 +2021,15 @@ var HttpService = (function () {
     function HttpService(http, router) {
         this.http = http;
         this.router = router;
+        this.herokusDomain = 'socbridge.herokuapp.com/';
+        this.localDomain = 'http://localhost:3000/';
     }
     HttpService.prototype.signUp = function (newUser) {
         var userCopy = newUser;
         console.log('Signup attempted');
         var body = JSON.stringify(userCopy);
         var header = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["c" /* Headers */]({ 'Content-Type': 'application/json' });
-        return this.http.post('http://localhost:3000/user/signUp', body, { headers: header })
+        return this.http.post(this.herokusDomain + 'user/signUp', body, { headers: header })
             .map(function (response) { return response.json(); })
             .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].throw(error.json()); });
     };
@@ -2036,7 +2038,7 @@ var HttpService = (function () {
         console.log('Signin attempted');
         var body = JSON.stringify(userCopy);
         var header = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["c" /* Headers */]({ 'Content-Type': 'application/json' });
-        return this.http.post('http://localhost:3000/user/signIn', body, { headers: header })
+        return this.http.post(this.herokusDomain + 'user/signIn', body, { headers: header })
             .map(function (response) { return response.json(); })
             .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].throw(error.json()); });
     };
@@ -2047,7 +2049,7 @@ var HttpService = (function () {
         var token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
         var body = JSON.stringify(modulesArr);
         var header = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["c" /* Headers */]({ 'Content-Type': 'application/json' });
-        return this.http.post('http://localhost:3000/user/populate' + token, body, { headers: header })
+        return this.http.post(this.herokusDomain + 'user/populate' + token, body, { headers: header })
             .map(function (response) { return response.json(); })
             .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].throw(error.json()); });
     };
@@ -2055,7 +2057,7 @@ var HttpService = (function () {
         var token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
         var body = JSON.stringify(post);
         var header = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["c" /* Headers */]({ 'Content-Type': 'application/json' });
-        return this.http.post('http://localhost:3000/posts/newPost' + token, body, { headers: header })
+        return this.http.post(this.herokusDomain + 'posts/newPost' + token, body, { headers: header })
             .map(function (response) { return response.json(); })
             .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].throw(error.json()); });
     };
@@ -2063,7 +2065,7 @@ var HttpService = (function () {
         var token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
         var body = JSON.stringify(comment);
         var header = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["c" /* Headers */]({ 'Content-Type': 'application/json' });
-        return this.http.post('http://localhost:3000/posts/newComment' + token, body, { headers: header })
+        return this.http.post(this.herokusDomain + 'posts/newComment' + token, body, { headers: header })
             .map(function (response) { return response.json(); })
             .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].throw(error.json()); });
     };
@@ -2071,7 +2073,7 @@ var HttpService = (function () {
         var token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
         var body = JSON.stringify(post);
         var header = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["c" /* Headers */]({ 'Content-Type': 'application/json' });
-        return this.http.post('http://localhost:3000/posts/editPost' + token, body, { headers: header })
+        return this.http.post(this.herokusDomain + 'posts/editPost' + token, body, { headers: header })
             .map(function (response) { return response.json(); })
             .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].throw(error.json()); });
     };
@@ -2079,7 +2081,7 @@ var HttpService = (function () {
         var token = localStorage.getItem('token') ? '?token=' + localStorage.getItem('token') : '';
         var body = JSON.stringify(post);
         var header = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["c" /* Headers */]({ 'Content-Type': 'application/json' });
-        return this.http.post('http://localhost:3000/posts/deletePost' + token, body, { headers: header })
+        return this.http.post(this.herokusDomain + 'posts/deletePost' + token, body, { headers: header })
             .map(function (response) { return response.json(); })
             .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].throw(error.json()); });
     };
