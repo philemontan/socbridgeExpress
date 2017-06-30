@@ -75,7 +75,8 @@ router.post('/signIn', function(req, res) {
                 })
             }
             //create & return auth token
-            var token = jwt.sign({user: user}, 'secret', {expiresIn: 7200});
+            var tokenPayload = { _id : user._id};
+            var token = jwt.sign({user: tokenPayload}, 'secret', {expiresIn: 7200});
             return res.status(200).json({
                 message: 'Successfully logged in',
                 token: token,
@@ -157,7 +158,7 @@ router.post('/populate', function(req,res,next) {
                                            console.log('user saved');
                                        }
                                    });
-                                   User.findOne({email: decoded.user.email})
+                                   User.findOne({_id: decoded.user._id})
                                        .populate({
                                            path: 'modules',
                                            populate: {
@@ -201,7 +202,7 @@ router.post('/populate', function(req,res,next) {
                                            console.log('user saved');
                                        }
                                    });
-                                   User.findOne({email: decoded.user.email})
+                                   User.findOne({_id: decoded.user._id})
                                        .populate({
                                            path: 'modules',
                                            populate: {
