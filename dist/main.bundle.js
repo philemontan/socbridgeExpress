@@ -693,7 +693,7 @@ var ChatComponent = (function () {
         this.currentModStr = '';
         this.messages = [];
         this.currUser = this.userService.getCurrentUser();
-        this.socket = __WEBPACK_IMPORTED_MODULE_2_socket_io_client__(this.localDomain);
+        this.socket = __WEBPACK_IMPORTED_MODULE_2_socket_io_client__(this.herokuDomain);
         this.socket.on('chat message', function (msg) {
             this.messages.push(msg);
         }.bind(this));
