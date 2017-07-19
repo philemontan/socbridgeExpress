@@ -101,8 +101,14 @@ io.on('connection', function (socket) {
         }
     });
     socket.on('unsubscribe', function (leavingInfo) {//index 0 = first name. index 1 = room name.
-        console.log(leavingInfo[0] + ' is leaving room ' + leavingInfo[1]);
-        socket.leave(leavingInfo[1]);
+        for (var property in roomArr) {
+            var index = roomArr[property].indexOf(leavingInfo);
+            if(index >= 0) {
+                roomArr[property].splice(index, 1);
+                socket.leave(property);
+                io.in(property).emit('user-left', leavingInfo);
+            }
+        }
     });
     socket.on('send', function (data) {
         console.log('sending message');
