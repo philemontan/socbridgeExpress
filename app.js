@@ -13,7 +13,7 @@ var user = require('./routes/user');
 var wallPosts = require('./routes/wallPosts');
 
 //local MongoDB
-mongoose.connect('localhost:27017/test');
+// mongoose.connect('localhost:27017/test');
 var options = {
     server: {socketOptions: {keepAlive: 300000, connectTimeoutMS: 30000}},
     replset: {socketOptions: {keepAlive: 300000, connectTimeoutMS: 30000}}
@@ -21,7 +21,7 @@ var options = {
 
 //mongoLAB, ID:admin, pw: admin
 var mongodbUri = 'mongodb://admin:admin@ds135812.mlab.com:35812/socbridge';
-// mongoose.connect(mongodbUri, options);
+mongoose.connect(mongodbUri, options);
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
